@@ -120,6 +120,7 @@
 
                         <div class="paypal-payment-form-wrap py-5 text-left">
 
+                            {{-- <form action="{{route('telebirr_redirect')}}" method="post"> --}}
                             <form action="{{route('telebirr_redirect')}}" method="post">
                                 @csrf
                                 <p>

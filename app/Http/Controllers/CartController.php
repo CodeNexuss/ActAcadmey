@@ -64,8 +64,4 @@ class CartController extends Controller
         return view(theme('checkout'), compact('title'));
     }
 
-
-
-
-
 }

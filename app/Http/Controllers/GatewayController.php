@@ -207,6 +207,9 @@ class GatewayController extends Controller
             return redirect(route('checkout'));
         }
 
+        $user = Auth::user();
+        dd($user->name);
+
         $cart = cart();
         $amount = $cart->total_amount;
 
