@@ -242,16 +242,16 @@ class GatewayController extends Controller
         $appkey = 'fa945fad72e640edaaf816ddcd9e2866';
         $publicKey = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmLAHu17fUEshx7xva1vPYLrJdU5GX9hSIEyMlap9QcChwDLDPVpD0RYTwHA7pvXE0HXmfVjfTEEogONpH9M+JWrvOePoUCUrplmonmovwgGbaiqXHbPw7sjHkO4bpkeGJ2vl7k8d8dGf6a8U/1W1H6Ee55HfTb+rkodD4FgbNvxHbEPWiqGnvbqenECAf7qieNnox9OgG5a7KkNJQOwo6KzvAfe+glqjlQEog3PJzVEAXHpAFl7EX1lSAg30RuiE0eacVwSiezNMMhaWW/cyr14VY0eBVndXoDCMyhJ1Z4nKxfK6O6oKs8FdQcpfMyfXareanuLP0qErdNrflF+V2wIDAQAB';
         $data=[
-            'outTradeNo' => "2021062421280000015",
+            'outTradeNo' => "2021062421280000018",
             'subject' => "Goods Name",
             'totalAmount' => "150",
-            'shortCode' => ":222222",
+            'shortCode' => "222222",
             'notifyUrl' => route('payment_thank_you_page'),
             'returnUrl' => route('paypal_notify'),
             'receiveName' => $user->name,
             'appId' => "915470ae19bb4260a5218e7de6c3bb75",
             'timeoutExpress' => "120",
-            'nonce' => "2021062421280000015",
+            'nonce' => "2021062421280000018",
             'timestamp' => "1233"
         ];
        
