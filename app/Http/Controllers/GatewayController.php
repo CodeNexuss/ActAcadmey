@@ -207,23 +207,20 @@ class GatewayController extends Controller
             return redirect(route('checkout'));
         }
 
-        $user = Auth::user();
-        dd($user->name);
-
         $cart = cart();
         $amount = $cart->total_amount;
 
         $user = Auth::user();
         $currency = get_option('currency_sign');
-
+       
         //Create payment in database
         $transaction_id = 'tran_'.time().str_random(6);
+        
         // get unique recharge transaction id
         while( ( Payment::whereLocalTransactionId($transaction_id)->count() ) > 0) {
             $transaction_id = 'reid'.time().str_random(5);
         }
         $transaction_id = strtoupper($transaction_id);
-
         $payments_data = [
             'name'                  => $user->name,
             'email'                 => $user->email,
@@ -234,48 +231,51 @@ class GatewayController extends Controller
             'currency'              => $currency,
             'local_transaction_id'  => $transaction_id,
         ];
-
+        
         //Create payment and clear it from session
         $payment = Payment::create_and_sync($payments_data);
         $request->session()->forget('cart');
 
         // Telebirr settings
-        header('Content-Type: application/json; charset=utf-8');
+        // header('Content-Type: application/json; charset=utf-8');
         $api = 'http://196.188.120.3:11443/service-openup/toTradeWebPay';
-        $appkey = '835ea4bee622439a942e9566e24dcc60';
-        $publicKey = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAgIwN9mVEWG9kagbxt2ippr8RNzK/fhBXcZa1ViQRnClz3VTjk9cnomIds3AFhsiNihNTPVSirbeCOKxr99mvJuuGdarzfkNEIbOkSLFfO7P6HdQHQjaTg9LueWUy1tz1gh0dsNpg4zPVr+T9lTCTWOnDgU2hNixo0r9wo72dxwXTc55vX4X7sWSz29WzrlKyyBQ2+CcA55EYp6cWwpkaTSfV+Boymr/ZnLI7qlp/7FGZk2574fvE/9uCZdnAHYCTzKOFUjEwZ9o8sw/f+TVglbKvRDSMpqsZXN6DY7FvXMp52ACM7OAp63y8Hir2YKAWj6OJ8KVoS8TAUeDmHyaWwwIDAQAB';
+        $appkey = 'fa945fad72e640edaaf816ddcd9e2866';
+        $publicKey = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmLAHu17fUEshx7xva1vPYLrJdU5GX9hSIEyMlap9QcChwDLDPVpD0RYTwHA7pvXE0HXmfVjfTEEogONpH9M+JWrvOePoUCUrplmonmovwgGbaiqXHbPw7sjHkO4bpkeGJ2vl7k8d8dGf6a8U/1W1H6Ee55HfTb+rkodD4FgbNvxHbEPWiqGnvbqenECAf7qieNnox9OgG5a7KkNJQOwo6KzvAfe+glqjlQEog3PJzVEAXHpAFl7EX1lSAg30RuiE0eacVwSiezNMMhaWW/cyr14VY0eBVndXoDCMyhJ1Z4nKxfK6O6oKs8FdQcpfMyfXareanuLP0qErdNrflF+V2wIDAQAB';
         $data=[
-            'outTradeNo' => "2021062421280000011",
+            'outTradeNo' => "2021062421280000015",
             'subject' => "Goods Name",
             'totalAmount' => "150",
-            'shortCode' => "10011",
+            'shortCode' => ":222222",
             'notifyUrl' => route('payment_thank_you_page'),
             'returnUrl' => route('paypal_notify'),
             'receiveName' => $user->name,
-            'appId' => "ce83aaa3dedd42ab88bd017ce1ca2dd8",
+            'appId' => "915470ae19bb4260a5218e7de6c3bb75",
             'timeoutExpress' => "120",
-            'nonce' => "2021062421280000011",
+            'nonce' => "2021062421280000015",
             'timestamp' => "1233"
         ];
-
+       
         ksort($data);
         $ussd = $data;
         $data['appKey'] = $appkey;
         ksort($data);
         $sign = $this->sign($data);
+     
         $encode = [
-                'appid' => "ce83aaa3dedd42ab88bd017ce1ca2dd8",
-                'sign' => $sign["sha256"],
-                'ussd' =>$this->encryptRSA(json_encode($ussd), $publicKey)
-            ];
-            list($returnCode, $returnContent) = $this->httpPostJson($api, json_encode($encode));
-            if ($returnCode == 200) {
-                $rsp = json_decode($returnContent, true);
-                return redirect()->away($rsp['data']['toPayUrl']);
-            } else {
-                return 'Fail:' . $returnCode . '   ' . $sign['values'];
-            }
+            'appid' => "915470ae19bb4260a5218e7de6c3bb75",
+            'sign' => $sign["sha256"],
+            'ussd' =>$this->encryptRSA(json_encode($ussd), $publicKey)
+        ];
+        list($returnCode, $returnContent) = $this->httpPostJson($api, json_encode($encode));
+        
+        if ($returnCode == 200) {
+            $rsp = json_decode($returnContent, true);
+            // dd($rsp);
+            return redirect()->away($rsp['data']['toPayUrl']);
+        } else {
+            return 'Fail:' . $returnCode . '   ' . $sign['values'];
         }
+    }
 
     public function payOffline(Request $request){
         $cart = cart();
