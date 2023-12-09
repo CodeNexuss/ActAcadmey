@@ -1,0 +1,300 @@
+@media (min-width: 1200px) {
+	.container {
+	    max-width: 90%;
+	}
+}
+.cls_design .main-navbar-wrap .navbar
+{
+	background-color: #F5F7FD !important;
+	border-bottom: 1px solid rgb(203,211,218,40%);
+    padding: 20px 0 !important;
+}
+.cls_login .card{
+	    background: #F5F5FD 0% 0% no-repeat padding-box;
+    box-shadow: 0px 3px 30px #9b9b9b29;
+    border-radius: 12px;
+    border-width: 0;
+}
+.cls_login .card-header{
+	background-color: unset;
+	border-width: 0;
+}
+.cls_login .card-header h2 {
+	color: #1C1D1F;
+	font-weight: bold;
+	font-size: 24px;
+}
+.cls_login .card-header h4 {
+	color: #1C1D1F;
+	font-size: 16px;
+}
+.cls_login .card-header h4 a{
+	color: #5022C3;
+	font-weight: bold;
+}
+.cls_login .form-control
+{
+	background: #FFFFFF 0% 0% no-repeat padding-box;
+    box-shadow: 5px 5px 30px #c5c5c529;
+    border-radius: 10px;
+    border-width: 0px;
+    height: 49px;
+    font-size: 16px;
+}
+.cls_login .form-control::placeholder
+{
+	color: #A2A5B7;
+}
+
+.cls_login .checkbox
+{
+	font-size: 16px;
+	color: #1C1D1F;
+}
+.cls_login .formget a {
+	font-size: 16px;
+	color: #1C1D1F;
+	text-decoration: underline;
+}
+.cls_login .cls_btn
+{
+	background: #1C1D1F;
+	box-shadow: 5px 5px 30px #C5C5C529;
+	border-radius: 10px;
+	font-size: 16px;
+	color: #fff;
+	padding: 12px;
+}
+.cls_login .social-login-wrap a{
+	background: #FFFFFF 0% 0% no-repeat padding-box;
+	box-shadow: 5px 5px 30px #C5C5C529;
+	border-radius: 10px;
+	color: #1C1D1F;
+	font-size: 16px;
+	display: inline-block;
+	align-items: center;
+	margin: 0 5px;
+	transition: 0.5s all linear;
+}
+.cls_login .social-login-wrap a:hover {
+    transform: rotate(360deg);
+}
+.cls_right {
+    background-color: #fff;
+    padding:0 0 1.5em 0;
+    /*border-radius: 10px;*/
+}
+
+.cls_right .form-control {
+    background-color: #f5f7fd;
+    border-color: #f5f7fd;
+    height: 49px;
+    border-radius: 8px;
+    font-size: 16px;
+        border: 1px solid #1c1d1f;
+}
+.cls_right .form-control:focus {
+	box-shadow: unset;
+}
+.cls_right .img-thumbnail
+{
+	background-color: #f5f7fd;
+    border: 1px solid #f5f7fd;
+    max-width: 120px;
+    border-radius: 100%;
+}
+.cls_right .select2-container .select2-selection--single {
+    background-color: #f5f7fd;
+    border: 1px solid #f5f7fd;
+    border-radius: 8px;
+    height: 49px;
+}
+.cls_right .select2-container--default .select2-selection--single .select2-selection__rendered {
+	    line-height: 49px;
+	    font-size: 16px;
+}
+.cls_right .select2-container--default .select2-selection--single .select2-selection__arrow
+{
+	height: 49px;
+}
+.cls_right .input-group-text
+{
+	background-color: #f5f7fd;
+    border-color: #f5f7fd;
+}
+.btn-warning{
+	background-color: #1C1D1F;
+	border-color: #1C1D1F;
+	color: #fff;
+	border-radius: 8px;
+	font-size: 16px;
+	padding: 10px 12px;
+}
+.btn-warning:hover , .btn-warning:focus {
+	background-color: #1C1D1F;
+	border-color: #1C1D1F;
+	color: #fff;
+}
+.list-group-item-info.list-group-item-action.active {
+   background-color: #1c1d1f;
+   border-radius: 8px;
+}
+.list-group-item-info {
+    color: #0c5460;
+    background-color: #f5f7fd;
+    border-color: #f5f7fd;
+}
+.add-to-cart-btn{
+	background: #5022C3;
+	border-radius: 8px;
+    padding: 8px 39px;
+	border-color: #5022C3;
+	color: #fff;
+}
+.add-to-cart-btn:hover ,.add-to-cart-btn:focus ,.add-to-cart-btn:active{
+	background: #5022C3;
+	border-color: #5022C3;
+	color: #fff;
+}
+p#expand-collapse-all-sections a {
+    color: #5022C3;
+    font-size: 18px;
+}
+.course-section {
+    border-radius: 8px;
+    overflow: hidden;
+}
+.course-curriculum-wrap .course-section:first-child .course-section-header {
+    border: 0;
+}
+.content-expand-inner * {
+    color: #1C1D1F;
+    line-height: 31px;
+    font-size: 18px;
+}
+.cls_listview {
+    background: #FCFCFF 0% 0% no-repeat padding-box;
+    border: 0.5px solid rgb(162 165 183 / 50%);
+    border-radius: 8px;
+}
+p.instructor-stat-value {
+    font-size: 18px;
+}
+.instructor-details * {
+    font-size: 18px;
+    line-height: 31px;
+}
+button.btn.btn-sm.btn-theme-primary.add-to-cart-btn {
+    background-color: #1C1D1F;
+    border-color: #1C1D1F;
+}
+.cls_btn_light {
+    background: #eef1f5;
+    border-radius: 8px;
+}
+.course-filter-form-group
+{
+	border: 1px solid #e4e9ef;
+    background-color: #f5f7fd;
+    border-radius: 10px;
+}
+.course-filter-form-group h4 {
+    color: #1C1D1F;
+    font-size: 18px;
+    font-weight: bold;
+}
+.course-sorting-form-wrap {
+    background: #f5f7fd;
+    padding: 15px;
+    border-radius: 10px;
+    border: 1px solid #e4e9ef;
+}
+.course-sorting-form-wrap select.form-control {
+    background: transparent;
+    border-color: #e4e9ef;
+}
+.custom-control-input:checked~.custom-control-label::before {
+    color: #fff;
+    border-color: #5022C3;
+    background-color: #5022C3;
+}
+.order-summery-course-thumbnail img {
+    height: 80px;
+    width: 150px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+.section-order-summery-wrap * {
+    font-size: 18px;
+}
+.cls_payment_view {
+	box-shadow: 0px 3px 30px #9B9B9B29;
+	border-radius: 12px;
+	align-items: center;
+}
+.cls_payment_view a {
+    color: #1C1D1F !important;
+    font-size: 20px !important;
+}
+.cls_payment_view a.active {
+    background-color: #5022C3 !important;
+    padding: 15px 35px;
+    border-radius: 12px;
+    color: #fff !important;
+}
+.stripe-credit-card-form-wrap .label{
+	color: #7E7E7E;
+	font-size: 18px;
+}
+.cls_gray_btn
+{
+	background-color: #EDE6FF;
+    border-color: #EDE6FF;
+    padding: 12px;
+}
+.btn-info , .btn-info:hover , .btn-info:focus , .btn-info:active , .btn-info:not(:disabled):not(.disabled):active{
+    color: #212529;
+    background-color: #EDE6FF;
+    border-color: #EDE6FF;
+}
+.btn-outline-info , .btn-outline-info:hover , .btn-outline-info:focus , .btn-outline-info:active , .btn-outline-info:not(:disabled):not(.disabled):active{
+	    color: #212529;
+    border-color: #EDE6FF;
+}
+.btn-outline-info:hover , .btn-outline-info:focus ,  .btn-outline-info:active , .btn-outline-info:not(:disabled):not(.disabled):active{
+	background-color: #EDE6FF;
+	 border-color: #EDE6FF;
+}
+span.enroll-course-btn-text {
+    border-right: 2px solid #1C1D1F !important;
+}
+.bank-payment-instruction-wrap {
+    box-shadow: 0px 3px 30px #9b9b9b29;
+    border-radius: 12px;
+}
+
+.cls_form_view .form-control {
+    box-shadow: 0px 3px 30px #9b9b9b29;
+    border-radius: 12px;
+    border-width: 0px;
+    height: 50px;
+}
+.cls_form_view label{
+	color: #1C1D1F;
+	font-size: 18px;
+	margin-bottom: 10px;
+}
+.offline-payment-form-wrap textarea.form-control {
+	box-shadow: 0px 3px 30px #9B9B9B29;
+	border-radius: 12px;
+	border: 0;
+}
+@media(max-width:767.5px) {
+	.cls_right {
+		background-color: #fff;
+    	padding: 0.5em;
+	}
+	span.enroll-course-btn-text{
+        border-right-width:0px !important ;
+    }
+}

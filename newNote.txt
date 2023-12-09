@@ -1,0 +1,21 @@
+resp:      
+{      
+        result: SUCCESS,
+         code: 0,
+         msg: success,
+         sign: Dl+jc6h5YKMIO4W0nzDfuDe3hhWirDI6ap0+fcp55bqd3TbHHxQgHeDnxSdmbKPNiUJibo4bU2GjvVHUoufnM8joWsqLRTkAfYeHWzIX1KuOzSbrt5oIIMLdL9ng+pCsIgbAEDaEsbF2UhOcSL24TgiilLSYMxK2NBdqRHBJr19JhlH1O7DfU+D1+T5siieLeUNfGWJb9SjXpvd1o6AnpeYniUbxklvS3ddxjZnFTn0ew4BREarTD++4g5r646x37rc+nx9UfrzFAiV5+cSLyj3d8RO+wL7pH9yqVlSFUhU4xV23II5mWjAD2O4n2r4VsBPQI4Dcy1OP/tycM2PnysQMVD2rAxvcpn0LW7ek+C5MlQWF6GbEoMgIS+JsKepYoSYchl+Aq/wEHkLsMUjYw4UDoWGpNn9vob+92SEkUvexXJaiGu2grbZaR0rRzTPLV1DVbb5Wavl8d3oJPFr42/HwOG5dMBtSIpmt33H7DUELBDv9JDfhdobVIG9rjrJc,
+         nonce_str: 47044279bd434899a9d52f801f8cbe84,
+         sign_type: SHA256WithRSA,
+         biz_content:          {             
+             open_id: 00100ca091973f722f0e288a9ef2d82c05a204ac843a140de1826a3b7c092d2aa6e5c,
+             identityId: 906327805312001,
+             identityType: ORGANIZATION,
+             walletIdentityId: 201000000000147008,
+             identifierType: SHORT_CODE,
+             identifier: 220288,
+             nickName: Santim,
+             status: 03,
+             walletOrgOperatorIdentityId: 203000000000035907,
+             shortCode: 220288         
+             }     
+           } 
