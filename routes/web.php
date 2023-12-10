@@ -132,6 +132,7 @@ Route::post('remove-cart', 'CartController@removeCart')->name('remove_cart');
 Route::group(['prefix' => 'gateway-ipn' ], function() {
     Route::post('stripe', 'GatewayController@stripeCharge')->name('stripe_charge');
     Route::any('paypal/{transaction_id?}', 'IPNController@paypalNotify')->name('paypal_notify');
+    Route::any('telebirr', 'IPNController@telebirrNotify')->name('telebirr_notify');
 });
 
 /**

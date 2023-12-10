@@ -108,6 +108,8 @@ class Payment extends Model
 
     public function save_and_sync($data = []){
 
+        dd($this->id);
+
         if (is_array($data) && count($data)){
             $this->update($data);
         }else{
