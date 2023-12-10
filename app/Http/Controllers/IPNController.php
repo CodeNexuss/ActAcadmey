@@ -101,25 +101,26 @@ class IPNController extends Controller
      * Payment IPN
      */
     public function telebirrNotify(Request $request){
-        // dd($request);
-        return $request;
-        // $payment = Payment::whereLocalTransactionId($transaction_id)->where('status','!=','success')->first();
+        $payment = Payment::whereLocalTransactionId($request->outTradeNo)->where('status','!=','success')->first();
 
-        // $verified = $this->paypal_ipn_verify();
-        // if ($verified){
-        //     //Payment success, we are ready approve your payment
-        //     $payment->status = 'success';
-        //     $payment->charge_id_or_token = $request->txn_id;
-        //     $payment->description = $request->item_name;
-        //     $payment->payer_email = $request->payer_email;
-        //     $payment->payment_created = strtotime($request->payment_date);
-        //     $payment->save_and_sync();
-        // }else{
-        //     $payment->status = 'declined';
-        //     $payment->description = trans('app.payment_declined_msg');
-        //     $payment->save_and_sync();
-        // }
+        // // $verified = $this->paypal_ipn_verify();
+        if ($payment){
+            //Payment success, we are ready approve your payment
+            $payment->status = 'success';
+            $payment->charge_id_or_token = $request->transactionNo;
+            $payment->description = $request->tradeStatus;
+            // // $payment->payer_email = $request->payer_email;
+            $payment->payment_created = $request->tradeDate;
+            $payment->save_and_sync();
+            return "SUCCESS";
+        }else{
+            $payment->status = 'declined';
+            $payment->description = trans('app.payment_declined_msg');
+            $payment->save_and_sync();
+            return "FAIL";
+        }
         // // Reply with an empty 200 response to indicate to paypal the IPN was received correctly
         // header("HTTP/1.1 200 OK");
+        
     }
 }
