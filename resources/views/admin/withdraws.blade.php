@@ -13,7 +13,6 @@
 @section('content')
 
     <div class="withdraws-list-wrap">
-
         <form action="" method="get">
 
 
@@ -25,7 +24,6 @@
                         <div class="input-group">
                             <select name="update_status" class="mr-3 form-control" style="flex: 0 0 200px;border-radius: 8px;">
                                 <option value="">{{__a('set_status')}}</option>
-
                                 <option value="pending">{{__a('pending')}}</option>
                                 <option value="approved">{{__a('approved')}}</option>
                                 <option value="rejected">{{__a('rejected')}}</option>
@@ -47,20 +45,19 @@
                                 </tr>
 
                                 @foreach($withdraws as $withdraw)
-
                                     <tr>
 
                                         <td>
                                             <label>
                                                 <input class="check_bulk_item" name="bulk_ids[]" type="checkbox" value="{{$withdraw->id}}" />
+                                                <input class="check_bulk_item" name="form_fields[]" type="checkbox" value="{{array_get($withdraw->method_data, 'form_fields')}}" />
+                                    
                                                 <span class="text-muted">#{{$withdraw->id}}</span>
                                             </label>
                                         </td>
                                         <td>
                                             <h6 class="mb-4">{{__a('amount')}}: <strong>{!! price_format($withdraw->amount) !!}</strong> {!! $withdraw->status_context !!} </h6>
                                             <h6>{{__a('method')}}: <strong>{{array_get($withdraw->method_data, 'method_name')}}</strong></h6>
-
-
                                         </td>
 
                                         <td>
@@ -68,6 +65,7 @@
                                             @if(is_array(array_get($withdraw->method_data, 'form_fields')))
                                                 @foreach(array_get($withdraw->method_data, 'form_fields') as $field)
                                                     <p class="mb-0"> {{array_get($field, 'label')}} : <strong>{!! array_get($field, 'value') !!}</strong></p>
+                                                    
                                                 @endforeach
                                             @endif
 
@@ -92,9 +90,6 @@
             @endif
 
         </form>
-
-
-
     </div>
 
 

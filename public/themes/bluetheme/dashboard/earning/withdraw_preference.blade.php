@@ -13,17 +13,20 @@
 
     @php
         $withdraw_methods = active_withdraw_methods();
+        // dd($withdraw_methods);
         $saved_preference = (array) $user->get_option('withdraw_preference');
     @endphp
 
     <div class="withdraw-method-preference-wrap bg-white p-4">
-        <form action="" method="post">
-
+        {{-- <form action="{{route('withdraw_post')}}" method="post"> --}}
+            
+        <form action="{{route('withdraw_preference_post')}}" method="post">
             @csrf
 
             <div class="withdraw-method-selection-wrap mb-4 row">
                 @foreach($withdraw_methods as $method_key => $method)
                     <div class="select-withdraw-method-name col-lg-4">
+                        
                         <input type="radio" class="withdraw-method-input" id="withdraw-method-{{$method_key}}-input" name="withdraw_preference[method]" value="{{$method_key}}" {{checked($method_key, array_get($saved_preference, 'method'))}} style="display: none;">
 
                         <label for="withdraw-method-{{$method_key}}-input" class="withdraw-preference-method-name border border-dark w-100 p-4 mr-3" data-target="withdraw-method-{{$method_key}}-form">
@@ -73,8 +76,6 @@
                                             <textarea name="withdraw_preference[{{$method_key}}][{{$field_key}}]" class="form-control" >{{array_get($saved_preference, $method_key.'.'.$field_key )}}</textarea>
                                         @endif
 
-
-
                                         @if(array_get($field, 'desc'))
                                             <p class="text-muted font-italic">
                                                 <small>{!! array_get($field, 'desc') !!}</small>
@@ -99,14 +100,8 @@
                     </div>
 
                 @endforeach
-
-
-
-
             </div>
         </form>
-
-
     </div>
 
 

@@ -78,6 +78,7 @@
             <div class="card mb-4">
                 <div class="card-body">
 
+                    {{-- post to withdraw ENDPOINT --}}
                     <form action="" method="post">
                         @csrf
 

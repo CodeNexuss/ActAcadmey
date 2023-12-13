@@ -1476,6 +1476,8 @@ if (! function_exists('no_data')) {
     }
 }
 
+
+
 if ( ! function_exists('withdraw_methods')) {
     function withdraw_methods(){
         $admin = (Auth::user() && Auth::user()->isAdmin()) ? true : false;
@@ -1537,10 +1539,20 @@ if ( ! function_exists('withdraw_methods')) {
                         'label' => ($admin) ? __a('paypal_email') : __t('paypal_email'),
                         'desc' => ($admin) ? __a('paypal_desc') : __t('paypal_desc'),
                     ],
-
                 ],
             ],
 
+            'telebirr' => [
+                'method_name' => 'telebirr',
+                'form_fields' => [
+                    'telebirr_phone' => [
+                        'type' => 'text',
+                        'label' => ($admin) ? __a('telebirr_phone') : __t('telebirr_phone'),
+                        'desc' => ($admin) ? __a('telebirr_phone') : __t('telebirr_phone'),
+                    ],
+
+                ],
+            ],
         ];
 
         return apply_filters('withdraw_methods', $methods);
@@ -1552,7 +1564,11 @@ if ( ! function_exists('active_withdraw_methods')) {
         $methods = withdraw_methods();
 
         foreach ($methods as $key => $method) {
-            if (!get_option("withdraw_methods.{$key}.enable")) {
+            // dd($methods, $key, $method);
+            // if (!get_option("withdraw_methods.{$key}.enable")) {
+            //     unset($methods[$key]);
+            // }
+            if (get_option("withdraw_methods.{$key}.enable")) {
                 unset($methods[$key]);
             }
         }

@@ -117,5 +117,13 @@ class PaymentController extends Controller
         return view(theme('payment-thank-you'), compact('title'));
     }
 
+    public function telebirrThankYou(){
+        $title = __t('payment_thank_you');
+
+        do_action('payment_thankyou');
+
+        return view(theme('payment-thank-you'), compact('title'));
+    }
+
 }
 

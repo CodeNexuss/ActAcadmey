@@ -29,10 +29,10 @@
                     </li>
                 @endif
 
-                 @if(get_option('enable_telebirr'))
+                @if(get_option('enable_telebirr'))
                     <li class="nav-item mr-lg-3 mr-0 mb-3 mb-lg-0">
                         <a class="nav-link" data-toggle="pill" href="#payment-tab-telebirr">
-                            <i class="la la-paypal"></i> {{__t('telebirr')}}
+                            {{__t('telebirr')}}
                         </a>
                     </li>
                 @endif
@@ -87,7 +87,7 @@
                     </div> <!-- tab-pane.// -->
                 @endif
 
-                {{-- @if(get_option('enable_paypal'))
+                @if(get_option('enable_paypal'))
                     <div class="tab-pane fade" id="payment-tab-paypal">
 
                         <div class="paypal-payment-form-wrap py-5 text-left">
@@ -109,11 +109,9 @@
                         </div>
 
                     </div>
-                @endif --}}
+                @endif
 
-                /**
-                *telebirr option
-                */
+               {{-- telebirr option --}}
 
                  @if(get_option('enable_telebirr'))
                     <div class="tab-pane fade" id="payment-tab-telebirr">
@@ -126,10 +124,10 @@
                                 <p>
                                     <button type="submit" class="btn cls_gray_btn btn-lg" id="paypal-payment-form-btn">
                                         <span class="enroll-course-btn-text mr-lg-4 mr-2 border-right pr-0 pr-lg-4">
-                                            <i class="la la-paypal"></i> {{__t('pay_with_telebirr')}}
+                                             {{__t('pay_with_telebirr')}}
                                         </span>
                                         <span class="enroll-course-btn-price">
-                                            {!! price_format($cart->total_amount) !!}
+                                           ETB {{$cart->total_amount}}
                                         </span>
                                     </button>
                                 </p>

@@ -207,6 +207,8 @@ class GatewayController extends Controller
             return redirect(route('checkout'));
         }
 
+        $unique_uid = $this->generateUUID();
+
         $cart = cart();
         $amount = $cart->total_amount;
 
@@ -230,7 +232,8 @@ class GatewayController extends Controller
             'status'                => 'initial', // pending | success | failed
             // 'currency'              => $currency,
             'currency'              => "ETB",
-            'local_transaction_id'  => $transaction_id,
+            // 'local_transaction_id'  => $transaction_id,
+            'local_transaction_id'  => $unique_uid,
         ];
         
         //Create payment and clear it from session
@@ -243,36 +246,34 @@ class GatewayController extends Controller
         $appkey = 'fa945fad72e640edaaf816ddcd9e2866';
         $publicKey = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmLAHu17fUEshx7xva1vPYLrJdU5GX9hSIEyMlap9QcChwDLDPVpD0RYTwHA7pvXE0HXmfVjfTEEogONpH9M+JWrvOePoUCUrplmonmovwgGbaiqXHbPw7sjHkO4bpkeGJ2vl7k8d8dGf6a8U/1W1H6Ee55HfTb+rkodD4FgbNvxHbEPWiqGnvbqenECAf7qieNnox9OgG5a7KkNJQOwo6KzvAfe+glqjlQEog3PJzVEAXHpAFl7EX1lSAg30RuiE0eacVwSiezNMMhaWW/cyr14VY0eBVndXoDCMyhJ1Z4nKxfK6O6oKs8FdQcpfMyfXareanuLP0qErdNrflF+V2wIDAQAB';
         $data=[
-            'outTradeNo' => $this->generateUUID(),
-            'subject' => "Goods Name",
+            'outTradeNo' => $unique_uid,
+            'subject' => "Buy Cocurce",
             'totalAmount' => $amount,
             'shortCode' => "222222",
             'notifyUrl' => route('telebirr_notify'),
-            'returnUrl' => route('telebirr_notify'),
+            'returnUrl' => route('telebirr_thank_you_page'),
             'receiveName' => $user->name,
             'appId' => "915470ae19bb4260a5218e7de6c3bb75",
             'timeoutExpress' => "120",
-            'nonce' => $this->generateUUID(),
-            // 'nonce' => "2021062421280000018",
-            'timestamp' => "1233"
+            'nonce' => $unique_uid,
+            'timestamp' => "123"
         ];
-       
+        
         ksort($data);
         $ussd = $data;
         $data['appKey'] = $appkey;
         ksort($data);
         $sign = $this->sign($data);
-     
+        
         $encode = [
             'appid' => "915470ae19bb4260a5218e7de6c3bb75",
             'sign' => $sign["sha256"],
             'ussd' =>$this->encryptRSA(json_encode($ussd), $publicKey)
         ];
-        list($returnCode, $returnContent) = $this->httpPostJson($api, json_encode($encode));
         
+        list($returnCode, $returnContent) = $this->httpPostJson($api, json_encode($encode));
         if ($returnCode == 200) {
             $rsp = json_decode($returnContent, true);
-            // dd($rsp);
             return redirect()->away($rsp['data']['toPayUrl']);
         } else {
             return 'Fail:' . $returnCode . '   ' . $sign['values'];

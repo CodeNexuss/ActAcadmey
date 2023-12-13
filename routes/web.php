@@ -71,6 +71,7 @@ Route::post('courses/free-enroll', 'CourseController@freeEnroll')->name('free_en
 Route::get('attachment-download/{hash}', 'CourseController@attachmentDownload')->name('attachment_download');
 
 Route::get('payment-thank-you/{transaction_id?}', 'PaymentController@thankYou')->name('payment_thank_you_page');
+Route::get('telebirr-thank-you', 'PaymentController@telebirrThankYou')->name('telebirr_thank_you_page');
 
 // Search and Filter
 Route::get('update_search_filter', 'HomeController@courses')->name('update_search_filter');
@@ -89,7 +90,10 @@ Route::group(['prefix'=>'login'], function(){
     Route::get('linkedin', 'AuthController@redirectLinkedIn')->name('linkedin_redirect');
     Route::get('linkedin/callback', 'AuthController@callbackLinkedIn')->name('linkin_callback');
 });
-
+/**
+ * payment gateway cnontrollers
+ * 
+ */
 
 Route::group(['middleware' => ['auth'] ], function() {
     Route::post('courses/{slug}/assignment/{assignment_id}', 'CourseController@assignmentSubmitting');
@@ -115,7 +119,6 @@ Route::group(['middleware' => ['auth'] ], function() {
     Route::post('quiz/{id}', 'QuizController@answerSubmit');
 
     //Route::get('quiz/answer/submit', 'QuizController@answerSubmit')->name('quiz_answer_submit');
-
 
 });
 
@@ -224,10 +227,14 @@ Route::group(['prefix'=>'dashboard', 'middleware' => ['auth'] ], function() {
         });
         Route::group(['prefix' => 'withdraw' ], function() {
             Route::get('/', 'EarningController@withdraw')->name('withdraw');
-            Route::post('/', 'EarningController@withdrawPost');
+            // Route::post('/', 'EarningController@withdrawPost');
+            Route::post('/', 'EarningController@withdrawPost')->name('withdraw_post');
 
             Route::get('preference', 'EarningController@withdrawPreference')->name('withdraw_preference');
-            Route::post('preference', 'EarningController@withdrawPreferencePost');
+            Route::post('preference', 'EarningController@withdrawPreferencePost')->name('withdraw_preference_post');
+
+            //withdraw option
+            // Route::any('withdraw_option', 'EarningController@withdrawPost')->name('withdraw_option');
         });
 
         Route::group(['prefix'=>'discussions'], function() {

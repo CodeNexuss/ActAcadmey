@@ -9,13 +9,14 @@ use Illuminate\Support\Facades\DB;
 
 class EarningController extends Controller
 {
-
     /**
      * Earning
      */
     public function earning(){
         $title = __t('earnings');
         $user = Auth::user();
+
+        
 
         /**
          * Format Date Name
@@ -62,7 +63,6 @@ class EarningController extends Controller
 
         return view(theme('dashboard.earning.index'), compact('user', 'title', 'chartData'));
     }
-
 
     public function earningReport(Request $request){
         $title = __t('report_statements');
@@ -200,35 +200,43 @@ class EarningController extends Controller
         return view(theme('dashboard.earning.report'), compact('user', 'title', 'page_title', 'total_amount', 'total_earning', 'commission', 'chartData', 'statements'));
     }
 
-
     /**
      * Withdraw Balance from the instructor
      *
      */
+
     public function withdraw(){
         $title = __t('withdraw');
         $user = Auth::user();
         return view(theme('dashboard.earning.withdraw'), compact('title', 'user'));
     }
+
     public function withdrawPost(Request $request){
-        $rules = [
-            'amount' => 'required|numeric',
-        ];
-        $this->validate($request, $rules);
+        // $rules = [
+        //     'amount' => 'required|numeric',
+        // ];
+        // $this->validate($request, $rules);
 
         $user = Auth::user();
 
-        if ($request->amount > $user->earning->balance){
-            return back()->withInput($request->input())->with('error', __t('no_balance_msg'));
-        }
+        $request_amount = 50;
+        // dd($request_amount, $user->earning->balance);
 
+        // if ($request_amount > $user->earning->balance){
+        //     return back()->withInput($request->input())->with('error', __t('no_balance_msg'));
+        // }
+
+        
         $data = [
             'user_id' => $user->id,
-            'amount' => $request->amount,
+            'amount' => $request_amount,
+            // 'amount' => $request->amount,
             'method_data' => json_encode($user->withdraw_method),
             'description' => $request->description,
             'status' => 'pending',
         ];
+
+        // dd($data);
 
         $min_amount = array_get($user->withdraw_method->admin_form_fields, 'min_withdraw_amount');
         if ($min_amount > $request->amount){
@@ -238,7 +246,6 @@ class EarningController extends Controller
         Withdraw::create($data);
 
         return back()->with('success', __t('withdraw_success_msg'));
-
     }
 
     public function withdrawPreference(){
@@ -249,9 +256,11 @@ class EarningController extends Controller
 
     public function withdrawPreferencePost(Request $request){
         $user = Auth::user();
+
+        // dd($request->withdraw_preference);
+    
         $user->update_option('withdraw_preference', $request->withdraw_preference);
         return back()->with('success', __t('withdraw_preference_saved'));
     }
-
 
 }

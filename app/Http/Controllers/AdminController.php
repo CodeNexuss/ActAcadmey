@@ -174,19 +174,41 @@ class AdminController extends Controller
      * Withdraw requests
      */
     public function withdrawsRequests(Request $request){
+               
+        $id_approved = $request->bulk_ids;
+
         if ($request->bulk_action_btn){
             if(is_live_env()) return back()->with('error', __a('demo_restriction'));
         }
 
         if ($request->bulk_action_btn === 'update_status' && $request->update_status){
-            $withdraw = Withdraw::whereIn('id', $request->bulk_ids)->where('status', 'approved')->first();
+            
+            $withdraw = Withdraw::whereIn('id', $id_approved)->where('status', 'approved')->first();
             if($withdraw) {
                 return back()->with('error', 'Approved withdraws not allowed to delete or update');
             }
 
-            Withdraw::whereIn('id', $request->bulk_ids)->update(['status' => $request->update_status]);
+            // $withdrawInfo = Withdraw::whereIn('id', $id_approved);
+            // $withdrawInfo = Withdraw::query();
+            // dd($withdrawInfo);
+
+            $hhtpRes = $this->sendHttpRequest("251900000032", "100");
+            dd($hhtpRes);
+
+            Withdraw::whereIn('id', [$id_approved])->update(['status' => $request->update_status]);
             return back();
         }
+
+        // if ($request->bulk_action_btn === 'update_status' && $request->update_status){
+           
+        //     $withdraw = Withdraw::whereIn('id', $request->bulk_ids)->where('status', 'approved')->first();
+        //     if($withdraw) {
+        //         return back()->with('error', 'Approved withdraws not allowed to delete or update');
+        //     }
+
+        //     Withdraw::whereIn('id', $request->bulk_ids)->update(['status' => $request->update_status]);
+        //     return back();
+        // }
         if ($request->bulk_action_btn === 'delete'){
             $withdraw = Withdraw::whereIn('id', $request->bulk_ids)->where('status', 'approved')->first();
             if($withdraw) {
@@ -201,6 +223,8 @@ class AdminController extends Controller
         $title = __a('withdraws');
         $withdraws = Withdraw::query();
 
+        //  dd($withdraws);
+
         if ($request->status){
             if ($request->status !== 'all'){
                 $withdraws = $withdraws->where('status', $request->status);
@@ -212,6 +236,75 @@ class AdminController extends Controller
         $withdraws = $withdraws->orderBy('created_at', 'desc')->paginate(50);
 
         return view('admin.withdraws', compact('title', 'withdraws'));
+    }
+
+    private function sendHttpRequest($phoneNumber, $orderAmount) {
+        $xml = '<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:com="http://cps.huawei.com/cpsinterface/common" xmlns:api="http://cps.huawei.com/cpsinterface/api_requestmgr" xmlns:req="http://cps.huawei.com/cpsinterface/request">
+                <soapenv:Header/>
+                <soapenv:Body>
+                    <api:Request>
+                        <req:Header>
+                            <req:Version>1.0</req:Version>
+                            <req:CommandID>InitTrans_2003</req:CommandID>
+                            <req:OriginatorConversationID>5634410eed0c42a6a85e76b1581fca51</req:OriginatorConversationID>
+                            <req:Caller>
+                            <req:CallerType>2</req:CallerType>
+                            <req:ThirdPartyID>ACT</req:ThirdPartyID>
+                            <req:Password>kKBWAInWDoW82SsoVqtwJS5NAnKidRtCAkpmJlpALdY=</req:Password>
+                            <req:ResultURL>http://demo.actamericancollege.com/</req:ResultURL>
+                            </req:Caller>
+                            <req:KeyOwner>1</req:KeyOwner>
+                            <req:Timestamp>20210914160116</req:Timestamp>
+                        </req:Header>
+                        <req:Body>
+                            <req:Identity>
+                            <req:Initiator>
+                                <req:IdentifierType>12</req:IdentifierType>
+                                <req:Identifier>22222201</req:Identifier>
+                                <req:SecurityCredential>bGid/VJtKT1KsZLSs0WCevApxPtdDIalpUnqZtzVdQ0=</req:SecurityCredential>
+                            <req:ShortCode>222222</req:ShortCode>
+                            </req:Initiator>
+                            <req:ReceiverParty>
+                                <req:IdentifierType>1</req:IdentifierType>
+                                <req:Identifier>'.$phoneNumber.'</req:Identifier>
+                            </req:ReceiverParty>
+                            </req:Identity>
+                            <req:TransactionRequest>
+                            <req:Parameters>
+                                <req:Amount>'.$orderAmount.'</req:Amount>
+                                <req:Currency>ETB</req:Currency>
+                            </req:Parameters>
+                            </req:TransactionRequest>
+                            <req:ReferenceData>
+                            <req:ReferenceItem>
+                                <com:Key>Remarks</com:Key>
+                                <com:Value>test1</com:Value>
+                            </req:ReferenceItem>
+                            </req:ReferenceData>
+                        </req:Body>
+                    </api:Request>
+                </soapenv:Body>
+                </soapenv:Envelope>';
+
+        $url = 'http://10.180.79.13:30001/payment/services/APIRequestMgrService';
+        // $url = 'http://196.188.120.3:11443/service-openup/toTradeWebPay';
+        
+
+        $headers = array(
+            'Content-Type: text/xml',
+            'Content-Length: ' . strlen($xml)
+        );
+
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $xml);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        return $response;
     }
 
     public function home_page_sliders(Request $request) {
@@ -231,6 +324,7 @@ class AdminController extends Controller
         }
         return view('admin.home_page_slider_update', $data);
     }
+
     public function home_page_slider_update(Request $request) {
         if(is_live_env()) return back()->with('error', __a('demo_restriction'));
         $rules = [
@@ -260,6 +354,7 @@ class AdminController extends Controller
         return redirect(route('home_page_sliders'))->with('success', $msg);
         
     }
+
     public function home_page_slider_delete(Request $request) {
         if(is_live_env()) return ['success' => false, 'message' => __a('demo_restriction')];
 

@@ -534,6 +534,7 @@ return
 	'ur_physical_address' => 'Your Physical Address',
 	'echeck_desc' => 'We will send you an E-Check to this address directly.',
 	'paypal_email' => 'PayPal E-Mail Address',
+	'telebirr_phone' => 'Telebirr Phone Number start with 251',
 	'paypal_desc' => 'Your earning will be send to this PayPal Account',
 	'discussion_sub_text_frontend' => 'Get answers directory from your instructor <br /> if you have any question about this topic',
 	'zoom_live_class_settings' => 'Zoom Live Class Settings',
