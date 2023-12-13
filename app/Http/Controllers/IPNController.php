@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Log;
 
 use App\Payment;
 use Illuminate\Http\Request;
@@ -101,11 +102,13 @@ class IPNController extends Controller
      * Payment IPN
      */
     public function telebirrNotify(Request $request){
-    
-        $request_body = $request->reqBody;
+        $content = $request->getContent();
+        Log::info("BACKEND NOTIFICATION HETED HERE");
+        Log::info($content);
        
-        // $response = $this->processPayment($request_body);
-        // return $response;
+        $response = $this->processPayment($content);
+        return $response;
+        // Thet
         $payment = Payment::whereLocalTransactionId($request->outTradeNo)->where('status','!=','success')->first();
 
         // $verified = $this->paypal_ipn_verify();
@@ -129,46 +132,155 @@ class IPNController extends Controller
         
     }
 
+    /**
+     * Heleper function
+     * process payment called decryptRSA which the decription the encrypted plane text 
+     * 
+     */
+
     private function processPayment($request_body)
     {
-        $content = file_get_contents('php://input');
+        // $content = file_get_contents('php://input');
+        // header('Content-Type:application/json; charset=utf-8');
         $api = 'http://196.188.120.3:11443/service-openup/toTradeWebPay';
         $appkey = '835ea4bee622439a942e9566e24dcc60';
-        $publicKey = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAjJs34fJhR1iSlaVSgluGmn7n8AlmjRefXXYHTlBj/IGsaUISJb5TIiZ0lt4y9WphdKC7v0qEPV7mFLKwUHHOPNBetbym90T8UWj7kU5CERyJlrqXSdBSJu1pFuFKScQpflOE2bJfFFiXrXYpSjEV9rFwOsuDCZbOPlcqe+Rg5VcZuIYvtNk2HnQS3v0wiRUnGPHqcOUxUuIDMN5lVLcaPXIPLdnCoPLqIWbSgxaTx/yjBkitnQ0D2R45Wo9dYZ5cw/OGYQO/L7KKRaM8HERmJIemzpHJSe7IFUAMg+M6PlpfoZUP2j/OSMZnMSqeOaY1VUNzIMWcHSQXgGShBR3F0QIDAQAB';
+        $publicKey = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmLAHu17fUEshx7xva1vPYLrJdU5GX9hSIEyMlap9QcChwDLDPVpD0RYTwHA7pvXE0HXmfVjfTEEogONpH9M+JWrvOePoUCUrplmonmovwgGbaiqXHbPw7sjHkO4bpkeGJ2vl7k8d8dGf6a8U/1W1H6Ee55HfTb+rkodD4FgbNvxHbEPWiqGnvbqenECAf7qieNnox9OgG5a7KkNJQOwo6KzvAfe+glqjlQEog3PJzVEAXHpAFl7EX1lSAg30RuiE0eacVwSiezNMMhaWW/cyr14VY0eBVndXoDCMyhJ1Z4nKxfK6O6oKs8FdQcpfMyfXareanuLP0qErdNrflF+V2wIDAQAB';
         
         $nofityData = $this->decryptRSA($request_body, $publicKey);
-        
+       
         return $nofityData;
 
+    //     function decrypt_RSA($publickey, $data){
+     
+    // // function decrypt_RSA($data, $publickey){
+    //         $decrypted = '';
+    //         $data = str_split(base64_decode($data), 256);
+    //         $pubPem = "-----BEGIN PUBLIC KEY-----\n" . $publickey . "\n-----END PUBLIC KEY-----";
+    //         $publicKey = openssl_pkey_get_public($pubPem); 
+    //         foreach ($data as $xData) {
+    //             $part = '';
+    //             $tryDecrpt = openssl_public_decrypt($xData, $part, $publicKey, OPENSSL_PKCS1_PADDING);
+    //             if ($tryDecrpt === false) {
+    //                return false;
+    //             }
+    //             $decrypted .= $part;
+    //         }
+    //         return $decrypted;  
+    // }
+
         // return response()->json(['code' => 0, 'msg' => 'success']);
+
+        // $publicKey = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmLAHu17fUEshx7xva1vPYLrJdU5GX9hSIEyMlap9QcChwDLDPVpD0RYTwHA7pvXE0HXmfVjfTEEogONpH9M+JWrvOePoUCUrplmonmovwgGbaiqXHbPw7sjHkO4bpkeGJ2vl7k8d8dGf6a8U/1W1H6Ee55HfTb+rkodD4FgbNvxHbEPWiqGnvbqenECAf7qieNnox9OgG5a7KkNJQOwo6KzvAfe+glqjlQEog3PJzVEAXHpAFl7EX1lSAg30RuiE0eacVwSiezNMMhaWW/cyr14VY0eBVndXoDCMyhJ1Z4nKxfK6O6oKs8FdQcpfMyfXareanuLP0qErdNrflF+V2wIDAQAB';
+        // $appkey = 'fa945fad72e640edaaf816ddcd9e2866';
+        // $data=[
+        //     'subject' => "Buy Cocurce",
+        //     'shortCode' => "222222",
+        //     'appId' => "915470ae19bb4260a5218e7de6c3bb75",
+        //     'timeoutExpress' => "120",
+        //     'timestamp' => "123"
+        // ];
+        
+        // ksort($data);
+        // $ussd = $data;
+        // $data['appKey'] = $appkey;
+        // ksort($data);
+        // $sign = $this->sign($data);
+        // $encode = [
+        //     'appid' => "915470ae19bb4260a5218e7de6c3bb75",
+        //     'sign' => $sign["sha256"],
+        //     'ussd' =>$this->encryptRSA(json_encode($ussd), $publicKey)
+        // ];
+        
+        // // list($returnCode, $returnContent) = $this->httpPostJson($api, json_encode($encode));
+        // return $encode;
+
     }
     
-    private function decryptRSA($source, $key)
-    {
-        $pubPem = chunk_split($key, 64, "\n");
-        $pubPem = "-----BEGIN PUBLIC KEY-----\n" . $pubPem . "-----END PUBLIC KEY-----\n";
+    private function decryptRSA($data, $publickey)
+    {   
+            $decrypted = '';
+            $data = str_split(base64_decode($data), 256);
+            $pubPem = "-----BEGIN PUBLIC KEY-----\n" . $publickey . "\n-----END PUBLIC KEY-----";
+            $publicKey = openssl_pkey_get_public($pubPem); 
         
-        $public_key = openssl_pkey_get_public($pubPem); 
-      
-        if (!$public_key) {
-            die('invalid public key');
-        }
-        $decrypted = ''; // decode must be done before splitting for getting the binary String
-        $data = str_split(base64_decode($source), 256);
-    
-        foreach ($data as $chunk) {
-            $partial = ''; // be sure to match padding
-            $decryptionOK = openssl_public_decrypt($chunk, $partial, $public_key, OPENSSL_PKCS1_PADDING);
-            print_r($public_key);
-            if ($decryptionOK === false) {
-                die('fail');
+            foreach ($data as $xData) {
+                $part = '';
+                $tryDecrpt = openssl_public_decrypt($xData, $part, $publicKey, OPENSSL_PKCS1_PADDING);
+                if ($tryDecrpt === false) {
+                   print_r("FALSE");
+                   return false;
+                }
+                $decrypted .= $part;
             }
-            $decrypted .= $partial;
-        }
-        return $decrypted;
+            // print_r($decrypted);
+            return $decrypted;  
+
+        // $pubPem = chunk_split($key, 64, "\n");
+        // $pubPem = "-----BEGIN PUBLIC KEY-----\n" . $pubPem . "-----END PUBLIC KEY-----\n";
+        
+        // $public_key = openssl_pkey_get_public($pubPem); 
+      
+        // if (!$public_key) {
+        //     die('invalid public key');
+        // }
+        // $decrypted = ''; // decode must be done before splitting for getting the binary String
+        // $data = str_split($source, 256);
+    
+        // foreach ($data as $chunk) {
+        //     $partial = ''; // be sure to match padding
+        //     // $decryptionOK = openssl_public_decrypt($chunk, $partial, $public_key, OPENSSL_PKCS1_PADDING);
+        //     $decryptionOK = openssl_public_decrypt($chunk, $partial, $public_key, OPENSSL_PKCS1_PADDING);
+            
+        //     if ($decryptionOK === false) {
+        //         die('fail');
+        //     }
+        //     $decrypted .= $partial;
+        // }
+        // print_r($decrypted);
+        // return $decrypted;
     }
 
     /**
-     * Heleper function
+     * For encription test
+     * 
      */
+
+    private function sign($params){
+        $signPars = '';
+        foreach ($params as $k => $v) {
+            if ($signPars == '') {
+                $signPars = $k . '=' . $v;
+            } else {
+                $signPars = $signPars . '&' . $k . '=' . $v;
+            }
+        }
+
+        $sign = [
+            'sha256' => hash("sha256", $signPars),
+            'values' => $signPars,
+        ];
+        return $sign;
+    }
+
+    private function encryptRSA($data, $public)
+    {
+        $pubPem = chunk_split($public, 64, "\n");
+        $pubPem = "-----BEGIN PUBLIC KEY-----\n" . $pubPem . "-----END PUBLIC KEY-----\n";
+        $public_key = openssl_pkey_get_public($pubPem);
+        if (!$public_key) {
+            die('invalid public key');
+        }
+        $crypto = '';
+        foreach (str_split($data, 117) as $chunk) {
+            $return = openssl_public_encrypt($chunk, $cryptoItem, $public_key);
+            if (!$return) {
+                return 'fail';
+            }
+            $crypto .= $cryptoItem;
+        }
+
+        $ussd = base64_encode($crypto);
+        return $ussd;
+    }
+
 }
