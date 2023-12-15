@@ -16,7 +16,6 @@ class Withdraw extends Model
     }
 
 
-
     public function getStatusContextAttribute(){
         $statusClass = "";
         $iclass = "";

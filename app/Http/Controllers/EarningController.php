@@ -212,20 +212,19 @@ class EarningController extends Controller
     }
 
     public function withdrawPost(Request $request){
+       
         // $rules = [
         //     'amount' => 'required|numeric',
         // ];
-        // $this->validate($request, $rules);
+        // $this->validate($request->amount, $rules);
 
         $user = Auth::user();
 
-        $request_amount = 50;
-        // dd($request_amount, $user->earning->balance);
+        $request_amount = $request->amount;
 
-        // if ($request_amount > $user->earning->balance){
-        //     return back()->withInput($request->input())->with('error', __t('no_balance_msg'));
-        // }
-
+        if ($request_amount > $user->earning->balance){
+            return back()->withInput($request->input())->with('error', __t('no_balance_msg'));
+        }
         
         $data = [
             'user_id' => $user->id,
@@ -236,9 +235,8 @@ class EarningController extends Controller
             'status' => 'pending',
         ];
 
-        // dd($data);
-
         $min_amount = array_get($user->withdraw_method->admin_form_fields, 'min_withdraw_amount');
+        // dd( $min_amount);
         if ($min_amount > $request->amount){
             return back()->withInput($request->input())->with('error', __t('min_amount_msg'));
         }
@@ -256,8 +254,6 @@ class EarningController extends Controller
 
     public function withdrawPreferencePost(Request $request){
         $user = Auth::user();
-
-        // dd($request->withdraw_preference);
     
         $user->update_option('withdraw_preference', $request->withdraw_preference);
         return back()->with('success', __t('withdraw_preference_saved'));

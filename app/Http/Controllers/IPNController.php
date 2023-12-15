@@ -1,8 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-use Illuminate\Support\Facades\Log;
 
+use Illuminate\Support\Facades\Log;
 use App\Payment;
 use Illuminate\Http\Request;
 
@@ -92,8 +92,6 @@ class IPNController extends Controller
         }
     }
 
-
-
      /**
      * Telebirr notification hit here
      * It decript and accept the request notify
@@ -103,33 +101,42 @@ class IPNController extends Controller
      */
     public function telebirrNotify(Request $request){
         $content = $request->getContent();
-        Log::info("BACKEND NOTIFICATION HETED HERE");
+        Log::info("CALLBACK NOTIFICATION HITED HERE");
         Log::info($content);
-       
+       /**
+        * callback response interface
+        * {"msisdn":"251900000032","outTradeNo":"b6e12f97a42145f98a336a2795f835be","totalAmount":"104","tradeDate":1702519773000,"tradeNo":"202312140507431735119347085897730","tradeStatus":2,"transactionNo":"ALE40OKU0U"}
+        */
         $response = $this->processPayment($content);
-        return $response;
-        // Thet
-        $payment = Payment::whereLocalTransactionId($request->outTradeNo)->where('status','!=','success')->first();
-
-        // $verified = $this->paypal_ipn_verify();
-        if ($payment){
-            //Payment success, we are ready approve your payment
-            $payment->status = 'success';
-            $payment->charge_id_or_token = $request->transactionNo;
-            $payment->description = $request->tradeStatus;
-            // // $payment->payer_email = $request->payer_email;
-            $payment->payment_created = $request->tradeDate;
-            $payment->save_and_sync();
-            return "SUCCESS";
-        }else{
-            $payment->status = 'declined';
-            $payment->description = trans('app.payment_declined_msg');
-            $payment->save_and_sync();
-            return "FAIL";
+        if($response){
+            $data = json_decode($response, true);
+            $outTradeNo = $data['outTradeNo'];
+            $tradeNo = $data['tradeNo'];
+            $description = $data['tradeNo'];
+            $transactionNo = $data['transactionNo'];
+            $tradeDate = $data['tradeDate'];
+            $msisdn = $data['msisdn'];
+            
+            $payment = Payment::whereLocalTransactionId($outTradeNo)->where('status','!=','success')->first();
+    
+            // $verified = $this->paypal_ipn_verify();
+            if ($payment){
+                //Payment success, we are ready approve your payment
+                $payment->status = 'success';
+                $payment->charge_id_or_token = $transactionNo;
+                $payment->description = $description;
+                $payment->payer_email = $msisdn;
+                $payment->payment_created = $tradeDate;
+                $payment->save_and_sync();
+                dd(outTradeNo);
+                return "SUCCESS";
+            }else{
+                $payment->status = 'declined';
+                $payment->description = trans('app.payment_declined_msg');
+                $payment->save_and_sync();
+                return "FAIL";
+            }
         }
-        // // Reply with an empty 200 response to indicate to paypal the IPN was received correctly
-        // header("HTTP/1.1 200 OK");
-        
     }
 
     /**
@@ -140,60 +147,12 @@ class IPNController extends Controller
 
     private function processPayment($request_body)
     {
-        // $content = file_get_contents('php://input');
-        // header('Content-Type:application/json; charset=utf-8');
         $api = 'http://196.188.120.3:11443/service-openup/toTradeWebPay';
         $appkey = '835ea4bee622439a942e9566e24dcc60';
         $publicKey = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmLAHu17fUEshx7xva1vPYLrJdU5GX9hSIEyMlap9QcChwDLDPVpD0RYTwHA7pvXE0HXmfVjfTEEogONpH9M+JWrvOePoUCUrplmonmovwgGbaiqXHbPw7sjHkO4bpkeGJ2vl7k8d8dGf6a8U/1W1H6Ee55HfTb+rkodD4FgbNvxHbEPWiqGnvbqenECAf7qieNnox9OgG5a7KkNJQOwo6KzvAfe+glqjlQEog3PJzVEAXHpAFl7EX1lSAg30RuiE0eacVwSiezNMMhaWW/cyr14VY0eBVndXoDCMyhJ1Z4nKxfK6O6oKs8FdQcpfMyfXareanuLP0qErdNrflF+V2wIDAQAB';
         
         $nofityData = $this->decryptRSA($request_body, $publicKey);
-       
         return $nofityData;
-
-    //     function decrypt_RSA($publickey, $data){
-     
-    // // function decrypt_RSA($data, $publickey){
-    //         $decrypted = '';
-    //         $data = str_split(base64_decode($data), 256);
-    //         $pubPem = "-----BEGIN PUBLIC KEY-----\n" . $publickey . "\n-----END PUBLIC KEY-----";
-    //         $publicKey = openssl_pkey_get_public($pubPem); 
-    //         foreach ($data as $xData) {
-    //             $part = '';
-    //             $tryDecrpt = openssl_public_decrypt($xData, $part, $publicKey, OPENSSL_PKCS1_PADDING);
-    //             if ($tryDecrpt === false) {
-    //                return false;
-    //             }
-    //             $decrypted .= $part;
-    //         }
-    //         return $decrypted;  
-    // }
-
-        // return response()->json(['code' => 0, 'msg' => 'success']);
-
-        // $publicKey = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAmLAHu17fUEshx7xva1vPYLrJdU5GX9hSIEyMlap9QcChwDLDPVpD0RYTwHA7pvXE0HXmfVjfTEEogONpH9M+JWrvOePoUCUrplmonmovwgGbaiqXHbPw7sjHkO4bpkeGJ2vl7k8d8dGf6a8U/1W1H6Ee55HfTb+rkodD4FgbNvxHbEPWiqGnvbqenECAf7qieNnox9OgG5a7KkNJQOwo6KzvAfe+glqjlQEog3PJzVEAXHpAFl7EX1lSAg30RuiE0eacVwSiezNMMhaWW/cyr14VY0eBVndXoDCMyhJ1Z4nKxfK6O6oKs8FdQcpfMyfXareanuLP0qErdNrflF+V2wIDAQAB';
-        // $appkey = 'fa945fad72e640edaaf816ddcd9e2866';
-        // $data=[
-        //     'subject' => "Buy Cocurce",
-        //     'shortCode' => "222222",
-        //     'appId' => "915470ae19bb4260a5218e7de6c3bb75",
-        //     'timeoutExpress' => "120",
-        //     'timestamp' => "123"
-        // ];
-        
-        // ksort($data);
-        // $ussd = $data;
-        // $data['appKey'] = $appkey;
-        // ksort($data);
-        // $sign = $this->sign($data);
-        // $encode = [
-        //     'appid' => "915470ae19bb4260a5218e7de6c3bb75",
-        //     'sign' => $sign["sha256"],
-        //     'ussd' =>$this->encryptRSA(json_encode($ussd), $publicKey)
-        // ];
-        
-        // // list($returnCode, $returnContent) = $this->httpPostJson($api, json_encode($encode));
-        // return $encode;
-
     }
     
     private function decryptRSA($data, $publickey)
@@ -212,32 +171,7 @@ class IPNController extends Controller
                 }
                 $decrypted .= $part;
             }
-            // print_r($decrypted);
-            return $decrypted;  
-
-        // $pubPem = chunk_split($key, 64, "\n");
-        // $pubPem = "-----BEGIN PUBLIC KEY-----\n" . $pubPem . "-----END PUBLIC KEY-----\n";
-        
-        // $public_key = openssl_pkey_get_public($pubPem); 
-      
-        // if (!$public_key) {
-        //     die('invalid public key');
-        // }
-        // $decrypted = ''; // decode must be done before splitting for getting the binary String
-        // $data = str_split($source, 256);
-    
-        // foreach ($data as $chunk) {
-        //     $partial = ''; // be sure to match padding
-        //     // $decryptionOK = openssl_public_decrypt($chunk, $partial, $public_key, OPENSSL_PKCS1_PADDING);
-        //     $decryptionOK = openssl_public_decrypt($chunk, $partial, $public_key, OPENSSL_PKCS1_PADDING);
-            
-        //     if ($decryptionOK === false) {
-        //         die('fail');
-        //     }
-        //     $decrypted .= $partial;
-        // }
-        // print_r($decrypted);
-        // return $decrypted;
+            return $decrypted; 
     }
 
     /**

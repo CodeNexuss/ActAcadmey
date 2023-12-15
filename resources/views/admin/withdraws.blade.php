@@ -50,7 +50,7 @@
                                         <td>
                                             <label>
                                                 <input class="check_bulk_item" name="bulk_ids[]" type="checkbox" value="{{$withdraw->id}}" />
-                                                <input class="check_bulk_item" name="form_fields[]" type="checkbox" value="{{array_get($withdraw->method_data, 'form_fields')}}" />
+                                
                                     
                                                 <span class="text-muted">#{{$withdraw->id}}</span>
                                             </label>
@@ -65,7 +65,7 @@
                                             @if(is_array(array_get($withdraw->method_data, 'form_fields')))
                                                 @foreach(array_get($withdraw->method_data, 'form_fields') as $field)
                                                     <p class="mb-0"> {{array_get($field, 'label')}} : <strong>{!! array_get($field, 'value') !!}</strong></p>
-                                                    
+                                        
                                                 @endforeach
                                             @endif
 

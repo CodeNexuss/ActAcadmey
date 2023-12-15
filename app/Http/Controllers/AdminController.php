@@ -187,13 +187,17 @@ class AdminController extends Controller
             if($withdraw) {
                 return back()->with('error', 'Approved withdraws not allowed to delete or update');
             }
+            /**
+             * In the given array structure, the telebirr_phone value is nested within the form_fields array. To access it, you need to chain the array indexes accordingly.
+             */
+            $InstAccountNumber = Withdraw::whereIn('id', $id_approved)->first()->method_data;
+            $telebirrPhone = $InstAccountNumber['form_fields']['telebirr_phone']['value'];
 
-            // $withdrawInfo = Withdraw::whereIn('id', $id_approved);
-            // $withdrawInfo = Withdraw::query();
-            // dd($withdrawInfo);
+            $amount = Withdraw::whereIn('id', $id_approved)->first()->amount;
 
-            $hhtpRes = $this->sendHttpRequest("251900000032", "100");
-            dd($hhtpRes);
+            //passing telebirrPhone and amount to withdrawAdminandChargeInstructure 
+            $withdrawAdminandChargeInstructure = $this->sendHttpRequest($telebirrPhone, $amount);
+            dd($withdrawAdminandChargeInstructure);
 
             Withdraw::whereIn('id', [$id_approved])->update(['status' => $request->update_status]);
             return back();
@@ -222,8 +226,6 @@ class AdminController extends Controller
 
         $title = __a('withdraws');
         $withdraws = Withdraw::query();
-
-        //  dd($withdraws);
 
         if ($request->status){
             if ($request->status !== 'all'){

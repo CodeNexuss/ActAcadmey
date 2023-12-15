@@ -37,6 +37,12 @@
                     Offline Payment
                 </a>
             </li>
+             <li class="nav-item">
+                <a class="nav-link" id="offline-payment-tab" data-toggle="pill" href="#telebirr">
+                    <i class="la la-wallet"></i>
+                    telebirr
+                </a>
+            </li>
 
             <?php do_action('payment_gateway_nav_menu_items_after'); ?>
 
@@ -56,6 +62,10 @@
 
             <div class="tab-pane fade" id="bank-payment">
                 @include('admin.payments.gateways.bank-payment')
+            </div>
+
+             <div class="tab-pane fade" id="telebirr">
+                @include('admin.payments.gateways.telebirr')
             </div>
 
             <div class="tab-pane fade" id="offline-payment">
