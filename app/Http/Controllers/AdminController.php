@@ -263,7 +263,7 @@ class AdminController extends Controller
                             <req:Initiator>
                                 <req:IdentifierType>12</req:IdentifierType>
                                 <req:Identifier>22222201</req:Identifier>
-                                <req:SecurityCredential>bGid/VJtKT1KsZLSs0WCevApxPtdDIalpUnqZtzVdQ0=</req:SecurityCredential>
+                                <req:SecurityCredential>D2mTmkX6kqdMi4Llyxk412ipWdz63neglqcXHmxpDTE=</req:SecurityCredential>
                             <req:ShortCode>222222</req:ShortCode>
                             </req:Initiator>
                             <req:ReceiverParty>
@@ -288,10 +288,10 @@ class AdminController extends Controller
                 </soapenv:Body>
                 </soapenv:Envelope>';
 
-        $url = 'http://10.180.79.13:30001/payment/services/APIRequestMgrService';
+        // $url = 'http://10.180.79.13:30001/payment/services/APIRequestMgrService';
+        $url = 'http://196.188.120.3:10001/payment/services/APIRequestMgrService';
         // $url = 'http://196.188.120.3:11443/service-openup/toTradeWebPay';
         
-
         $headers = array(
             'Content-Type: text/xml',
             'Content-Length: ' . strlen($xml)

@@ -90,8 +90,10 @@ Route::group(['prefix'=>'login'], function(){
     Route::get('linkedin', 'AuthController@redirectLinkedIn')->name('linkedin_redirect');
     Route::get('linkedin/callback', 'AuthController@callbackLinkedIn')->name('linkin_callback');
 });
+
+
 /**
- * payment gateway cnontrollers
+ * payment gateway controllers
  * 
  */
 
@@ -131,6 +133,7 @@ Route::post('remove-cart', 'CartController@removeCart')->name('remove_cart');
 /**
  * Payment Gateway Silent Notification
  * CSRF verification skipped
+ * Notification send to backend and update the logic
  */
 Route::group(['prefix' => 'gateway-ipn' ], function() {
     Route::post('stripe', 'GatewayController@stripeCharge')->name('stripe_charge');
@@ -225,6 +228,7 @@ Route::group(['prefix'=>'dashboard', 'middleware' => ['auth'] ], function() {
             Route::get('/', 'EarningController@earning')->name('earning');
             Route::get('report', 'EarningController@earningReport')->name('earning_report');
         });
+        
         Route::group(['prefix' => 'withdraw' ], function() {
             Route::get('/', 'EarningController@withdraw')->name('withdraw');
             // Route::post('/', 'EarningController@withdrawPost');

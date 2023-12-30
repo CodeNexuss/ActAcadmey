@@ -312,6 +312,7 @@ class GatewayController extends Controller
 
         return redirect(route('payment_thank_you_page'));
     }
+    
 
     /**
      * Heleper function
